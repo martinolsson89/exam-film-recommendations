@@ -1,0 +1,249 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#loadingIndicator {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+    margin: 20px auto;  /* Centers horizontally and adds spacing */
+    /* Removed position: fixed, top, left, and transform */
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Existing CSS for the modal is in index.html using Tailwind classes. Modify the inner modal container for mobile screens: */
+@media (max-width: 640px) {
+    .movie-card {
+        max-width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.backButton{
+    background-color: #222936;
+}
+.backButton:hover{
+    background-color: #56708f;
+}
+
+/* Ensure proper aspect ratio for embedded videos */
+.aspect-w-16 {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625 or 56.25%) */
+}
+
+.aspect-w-16 iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* FIXED: Remove transparency on movie cards hover */
+.movie-card {
+    isolation: isolate;
+    /* Add solid background colors to ensure no transparency */
+    background-color: #ffffff;
+}
+
+.dark .movie-card {
+    background-color: #374151;
+}
+
+/* FIXED: Remove scale hover effect that might cause transparency impression */
+.movie-card.hover\:scale-105:hover {
+    transform: none !important;
+}
+
+/* FIXED: Remove any blue border/outline on elements when clicked */
+* {
+    outline: none !important;
+}
+
+*:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Improve button focus states with custom styling */
+button:focus, 
+a:focus, 
+div[tabindex="0"]:focus {
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+    /* Subtle glow effect instead of harsh blue outline */
+}
+
+/* Make the actor modal background darker but not too dark */
+#actorModal {
+    background-color: rgba(0, 0, 0, 0.65) !important;
+    backdrop-filter: blur(3px);
+    transition: opacity 0.2s ease-in-out, backdrop-filter 0.25s ease;
+}
+
+/* Ensure actor modal content has solid background with no transparency */
+#actorModal .bg-white,
+#actorModal .dark\:bg-gray-800,
+#actorModal div[class*="bg-white"],
+#actorModal div[class*="bg-gray"] {
+    background-color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+.dark #actorModal .bg-white,
+.dark #actorModal .dark\:bg-gray-800,
+.dark #actorModal div[class*="bg-white"],
+.dark #actorModal div[class*="bg-gray"] {
+    background-color: #1f2937 !important;
+    opacity: 1 !important;
+}
+
+/* Add border to make modal content stand out more */
+#actorModal > div {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.2s ease-out, opacity 0.15s ease-in;
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Add a distinct shadow around the modal for better visual separation */
+#actorModal > div {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* FIXED: Ensure biography text doesn't get cut off */
+#actorDetailsContent .biography-text {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+    /* Smooth scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+}
+
+/* Custom scrollbar for webkit browsers */
+#actorDetailsContent .biography-text::-webkit-scrollbar {
+    width: 6px;
+}
+
+#actorDetailsContent .biography-text::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#actorDetailsContent .biography-text::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.5);
+    border-radius: 3px;
+}
+
+/* Updated: Simple X close buttons without circular background */
+#closeTrailerModal,
+#closeActorModal {
+    cursor: pointer;
+    transition: color 0.2s;
+    z-index: 50;
+    background: none;
+    padding: 4px;
+}
+
+#closeTrailerModal:hover,
+#closeActorModal:hover {
+    color: #FFFFFF;
+}
+
+.movie-item {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.movie-item:hover {
+  transform: translateY(-3px);
+  opacity: 0.9;
+}
+
+.movie-item:active {
+  transform: translateY(0);
+}
+
+/* Mobile optimization for actor modal */
+@media (max-width: 640px) {
+    /* Fix modal positioning and scrolling */
+    #actorModal {
+        align-items: flex-start !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    
+    /* Adjust the modal content container */
+    #actorModal > div {
+        max-height: 100vh !important;
+        height: 100vh;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 0 !important;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Keep header fixed at top */
+    #actorModal .p-4.border-b {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    
+    /* Make content area take remaining space and scroll */
+    #actorDetailsContent {
+        flex: 1;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 40px !important; /* Extra padding at bottom for better scrolling experience */
+    }
+    
+    /* Remove max-height limitation on biography */
+    #actorDetailsContent .biography-text {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    
+    /* Improve layout for smaller screens */
+    #actorDetailsContent .flex.flex-col.md\:flex-row {
+        flex-direction: column !important;
+    }
+    
+    #actorDetailsContent .md\:w-1\/3,
+    #actorDetailsContent .md\:w-2\/3 {
+        width: 100% !important;
+    }
+
+    /* Improve the spacing between sections */
+    #actorDetailsContent .mt-6 {
+        margin-top: 2rem !important;
+    }
+
+    /* Add a better gap between image and biography */
+    #actorDetailsContent .gap-6 {
+        gap: 1.5rem !important;
+    }
+
+    /* Make sure grid items are sized properly */
+    #actorDetailsContent .grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    /* Ensure born/birthplace info is visible */
+    #actorDetailsContent .space-y-1 {
+        margin-bottom: 1rem !important;
+    }
+}
